@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import profileImg from './assets/profile.jpg'
 import uaeMapImg from './assets/uae-map.png'
-import { HashRouter, Routes, Route, NavLink } from 'react-router-dom'
+import { HashRouter, Routes, Route, NavLink, Link, useParams } from 'react-router-dom'
 import {
   House,
   UserRound,
@@ -14,14 +14,13 @@ import {
   Compass,
   Quote,
 } from 'lucide-react'
+import { projects } from './data/projects'
 
 const SiteContext = createContext(null)
 
 const translations = {
   en: {
     langLabel: 'Language',
-    english: 'English',
-    arabic: 'العربية',
     nav: {
       home: 'Home',
       about: 'About',
@@ -109,11 +108,11 @@ const translations = {
         },
       ],
     },
-    projects: {
+    projectsPage: {
       badge: 'Selected Work',
       title: 'Projects & Engagements',
       lead:
-        'A more structured showcase of consulting, service excellence, and public-sector work across strategy, evaluation, performance improvement, and digital systems.',
+        'A more structured showcase of consulting, service excellence, public-sector work, and business development projects.',
       search: 'Search projects',
       all: 'All',
       filters: {
@@ -123,54 +122,14 @@ const translations = {
         digital: 'Digital Systems',
         business: 'Business Development',
       },
-      featured: 'Featured Work',
       details: 'Highlights',
-      items: [
-        {
-          title: 'ICP UAE – Global Stars (7 Stars) & GEM 2.0 Implementation',
-          description:
-            'Led implementation of the UAE Government Global Stars Service Excellence Framework across multiple ICP centers, including assessments, improvement roadmaps, audit readiness, and institutional performance enhancement.',
-          tags: ['Government', 'Excellence', 'Consulting'],
-          highlights: ['Service excellence framework implementation', 'Assessment and improvement roadmaps', 'Audit readiness and structured reporting'],
-        },
-        {
-          title: 'MOHAP – Excellence Incubator System',
-          description:
-            'Co-developed and managed an excellence incubator system for employee evaluation and award participation, integrating performance data and structured assessments with reporting aligned to MOHAP standards.',
-          tags: ['Government', 'Digital Systems', 'Excellence'],
-          highlights: ['Internal evaluation workflow', 'Employee data integration', 'Reporting and participation management'],
-        },
-        {
-          title: 'TDRA – Service Quality & Data Analytics',
-          description:
-            'Analyzed large-scale datasets using priority matrices and gap analysis, delivered service improvement recommendations, and contributed to a digital assessment system supporting 7 Stars evaluations.',
-          tags: ['Consulting', 'Digital Systems', 'Excellence'],
-          highlights: ['Data-driven service analysis', 'Priority matrix and gap assessment', 'Digital assessment support'],
-        },
-        {
-          title: 'AJEP – Mystery Shopper Program',
-          description:
-            'Delivered mystery shopper assessments across Ajman Government service channels to evaluate customer experience, identify performance gaps, and support service enhancement initiatives.',
-          tags: ['Government', 'Consulting'],
-          highlights: ['Customer journey assessment', 'Performance gap identification', 'Actionable service recommendations'],
-        },
-        {
-          title: 'Adaa Consulting – Business Development & Proposal Work',
-          description:
-            'Supported pipeline growth, proposals, scope structuring, and client-facing business development across consulting engagements and public-sector opportunities.',
-          tags: ['Business Development', 'Consulting'],
-          highlights: ['Proposal preparation', 'Opportunity qualification', 'Client coordination and structured follow-up'],
-        },
-      ],
+      open: 'Open project',
     },
     contact: {
       badge: 'Contact',
       title: 'Let’s Connect',
       lead:
         'For consulting opportunities, project discussions, collaboration, or professional networking, the details below are the best way to reach me.',
-      email: 'Email',
-      phone: 'Phone',
-      location: 'Location',
       linkedin: 'LinkedIn Profile',
       formTitle: 'Quick Message',
       formName: 'Name',
@@ -181,11 +140,17 @@ const translations = {
       locationValue: 'Fujairah, UAE',
       reasonOptions: ['Consulting inquiry', 'Project discussion', 'Collaboration', 'General contact'],
     },
+    projectDetail: {
+      badge: 'Project Detail',
+      whatIDid: 'What I Did',
+      outputs: 'Outputs',
+      results: 'Results',
+      notFound: 'Project not found',
+      back: 'Back to Projects',
+    },
   },
   ar: {
     langLabel: 'اللغة',
-    english: 'English',
-    arabic: 'العربية',
     nav: {
       home: 'الرئيسية',
       about: 'نبذة عني',
@@ -238,7 +203,8 @@ const translations = {
     about: {
       badge: 'نبذة عني',
       title: 'تقديم مهني',
-      lead: 'أفضل أداء أقدمه يكون عندما تكون الاستراتيجية واضحة، والتنفيذ منضبطًا، والحل يخلق قيمة حقيقية.',
+      lead:
+        'أفضل أداء أقدمه يكون عندما تكون الاستراتيجية واضحة، والتنفيذ منضبطًا، والحل يخلق قيمة حقيقية.',
       sections: [
         {
           title: 'الملف المهني',
@@ -272,7 +238,7 @@ const translations = {
         },
       ],
     },
-    projects: {
+    projectsPage: {
       badge: 'الأعمال المختارة',
       title: 'المشاريع والإنجازات',
       lead:
@@ -286,54 +252,14 @@ const translations = {
         digital: 'أنظمة رقمية',
         business: 'تطوير أعمال',
       },
-      featured: 'أعمال مميزة',
       details: 'أبرز النقاط',
-      items: [
-        {
-          title: 'الهيئة الاتحادية للهوية والجنسية – تطبيق 7 نجوم و GEM 2.0',
-          description:
-            'قيادة تطبيق إطار النجوم العالمية للتميز الخدمي عبر عدة مراكز، مع إعداد تقييمات شاملة وخطط تحسين ودعم الجاهزية للتقييم المؤسسي.',
-          tags: ['حكومي', 'تميز', 'استشارات'],
-          highlights: ['تطبيق إطار التميز الخدمي', 'خطط تحسين مؤسسية', 'تقارير وجاهزية للتقييم'],
-        },
-        {
-          title: 'وزارة الصحة ووقاية المجتمع – نظام حاضنة التميز',
-          description:
-            'المشاركة في تطوير وإدارة نظام داخلي لتقييم الموظفين والمشاركة في الجوائز ودمج بيانات الأداء في مسارات تقييم منظمة.',
-          tags: ['حكومي', 'أنظمة رقمية', 'تميز'],
-          highlights: ['سير عمل تقييم داخلي', 'دمج بيانات الموظفين', 'تقارير ومتابعة منظمة'],
-        },
-        {
-          title: 'هيئة تنظيم الاتصالات والحكومة الرقمية – جودة الخدمة وتحليل البيانات',
-          description:
-            'تحليل مجموعات بيانات كبيرة باستخدام مصفوفات الأولوية وتحليل الفجوات وتقديم توصيات لتحسين الخدمات والمساهمة في نظام تقييم رقمي.',
-          tags: ['استشارات', 'أنظمة رقمية', 'تميز'],
-          highlights: ['تحليل بيانات خدمات', 'تحديد فجوات وأولويات', 'دعم نظام تقييم رقمي'],
-        },
-        {
-          title: 'برنامج عجمان للتميز الحكومي – المتسوق السري',
-          description:
-            'تنفيذ تقييمات المتسوق السري عبر قنوات الخدمة الحكومية لقياس تجربة العميل وتحديد فجوات الأداء ودعم مبادرات التحسين.',
-          tags: ['حكومي', 'استشارات'],
-          highlights: ['قياس تجربة المتعامل', 'تحديد الفجوات', 'توصيات قابلة للتنفيذ'],
-        },
-        {
-          title: 'أداء للاستشارات – تطوير الأعمال والعروض',
-          description:
-            'دعم نمو خط الفرص وإعداد العروض وهيكلة النطاقات والتواصل مع الجهات في عدة مشاريع واستشارات.',
-          tags: ['تطوير أعمال', 'استشارات'],
-          highlights: ['إعداد عروض', 'تأهيل فرص', 'تنسيق ومتابعة العملاء'],
-        },
-      ],
+      open: 'فتح المشروع',
     },
     contact: {
       badge: 'تواصل',
       title: 'لنتواصل',
       lead:
         'للاستشارات وفرص المشاريع والتعاون أو التواصل المهني، يمكنكم استخدام المعلومات التالية أو نموذج الرسالة السريع.',
-      email: 'البريد الإلكتروني',
-      phone: 'الهاتف',
-      location: 'الموقع',
       linkedin: 'الملف الشخصي على لينكدإن',
       formTitle: 'رسالة سريعة',
       formName: 'الاسم',
@@ -343,6 +269,14 @@ const translations = {
       send: 'إرسال الرسالة',
       locationValue: 'الفجيرة، الإمارات',
       reasonOptions: ['استفسار استشاري', 'مناقشة مشروع', 'تعاون', 'تواصل عام'],
+    },
+    projectDetail: {
+      badge: 'تفاصيل المشروع',
+      whatIDid: 'ما الذي قمت به',
+      outputs: 'المخرجات',
+      results: 'النتائج',
+      notFound: 'المشروع غير موجود',
+      back: 'العودة إلى المشاريع',
     },
   },
 }
@@ -387,7 +321,7 @@ function AppShell() {
 
   const styleVars = {
     fontSize: `${accessibility.textScale}rem`,
-    filter: `${accessibility.grayscale ? 'grayscale(1)' : ''}`,
+    filter: accessibility.grayscale ? 'grayscale(1)' : '',
   }
 
   return (
@@ -404,6 +338,7 @@ function AppShell() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/projects" element={<ProjectsPage />} />
               <Route path="/contact" element={<ContactPage />} />
+              <Route path="/project/:id" element={<ProjectDetailPage />} />
             </Routes>
           </Layout>
         </HashRouter>
@@ -415,7 +350,8 @@ function AppShell() {
 function Layout({ children, accessOpen, setAccessOpen }) {
   const { t, language, setLanguage, accessibility, setAccessibility, isArabic } = useSite()
 
-  const navBase = 'inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white'
+  const navBase =
+    'inline-flex items-center gap-2 rounded-2xl px-4 py-2 text-sm font-medium text-slate-300 transition hover:bg-white/5 hover:text-white'
   const navActive = 'bg-white/10 text-white'
 
   const resetAccessibility = () => setAccessibility(defaultAccessibility)
@@ -482,20 +418,32 @@ function Layout({ children, accessOpen, setAccessOpen }) {
       </header>
 
       {accessOpen && (
-        <div className={`fixed ${isArabic ? 'left-6' : 'right-6'} top-24 z-50 w-[20rem] rounded-[24px] border border-white/10 bg-[#0b1424]/95 p-5 shadow-2xl backdrop-blur-xl`}>
+        <div
+          className={`fixed ${isArabic ? 'left-6' : 'right-6'} top-24 z-50 w-[20rem] rounded-[24px] border border-white/10 bg-[#0b1424]/95 p-5 shadow-2xl backdrop-blur-xl`}
+        >
           <h3 className="text-lg font-semibold">{t.accessibility.title}</h3>
           <div className="mt-4 space-y-4 text-sm">
             <div>
               <p className="mb-2 text-slate-300">{t.accessibility.textSize}</p>
               <div className="flex gap-2">
                 <button
-                  onClick={() => setAccessibility((prev) => ({ ...prev, textScale: Math.max(0.9, +(prev.textScale - 0.1).toFixed(1)) }))}
+                  onClick={() =>
+                    setAccessibility((prev) => ({
+                      ...prev,
+                      textScale: Math.max(0.9, +(prev.textScale - 0.1).toFixed(1)),
+                    }))
+                  }
                   className="rounded-lg border border-white/10 px-3 py-2"
                 >
                   {t.accessibility.decrease}
                 </button>
                 <button
-                  onClick={() => setAccessibility((prev) => ({ ...prev, textScale: Math.min(1.3, +(prev.textScale + 0.1).toFixed(1)) }))}
+                  onClick={() =>
+                    setAccessibility((prev) => ({
+                      ...prev,
+                      textScale: Math.min(1.3, +(prev.textScale + 0.1).toFixed(1)),
+                    }))
+                  }
                   className="rounded-lg border border-white/10 px-3 py-2"
                 >
                   {t.accessibility.increase}
@@ -514,12 +462,20 @@ function Layout({ children, accessOpen, setAccessOpen }) {
                 <input
                   type="checkbox"
                   checked={accessibility[key]}
-                  onChange={(e) => setAccessibility((prev) => ({ ...prev, [key]: e.target.checked }))}
+                  onChange={(e) =>
+                    setAccessibility((prev) => ({
+                      ...prev,
+                      [key]: e.target.checked,
+                    }))
+                  }
                 />
               </label>
             ))}
 
-            <button onClick={resetAccessibility} className="w-full rounded-xl bg-cyan-400 px-4 py-3 font-medium text-slate-950">
+            <button
+              onClick={resetAccessibility}
+              className="w-full rounded-xl bg-cyan-400 px-4 py-3 font-medium text-slate-950"
+            >
               {t.accessibility.reset}
             </button>
           </div>
@@ -556,7 +512,9 @@ function HomePage() {
               <span className="text-sm uppercase tracking-[0.28em] text-cyan-300/90">{t.home.badge}</span>
             </div>
 
-            <div className={`mt-8 flex flex-col gap-6 ${isArabic ? 'sm:flex-row-reverse sm:items-center' : 'sm:flex-row sm:items-center'}`}>
+            <div
+              className={`mt-8 flex flex-col gap-6 ${isArabic ? 'sm:flex-row-reverse sm:items-center' : 'sm:flex-row sm:items-center'}`}
+            >
               <div className="shrink-0">
                 <div className="overflow-hidden rounded-[28px] border border-white/10 bg-white/[0.05] p-2 shadow-xl">
                   <img
@@ -568,7 +526,9 @@ function HomePage() {
               </div>
 
               <div>
-                <h1 className="text-5xl font-semibold leading-[1.02] tracking-tight sm:text-6xl">{t.home.title}</h1>
+                <h1 className="text-5xl font-semibold leading-[1.02] tracking-tight sm:text-6xl">
+                  {t.home.title}
+                </h1>
                 <p className="mt-4 text-2xl text-slate-300">{t.home.role}</p>
               </div>
             </div>
@@ -576,20 +536,47 @@ function HomePage() {
             <p className="mt-8 max-w-2xl text-lg leading-9 text-slate-400">{t.home.intro}</p>
 
             <div className="mt-8 flex flex-wrap gap-3">
-              <NavLink to="/projects" className="inline-flex items-center gap-2 rounded-2xl bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:opacity-90">
+              <NavLink
+                to="/projects"
+                className="inline-flex items-center gap-2 rounded-2xl bg-cyan-400 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:opacity-90"
+              >
                 <BriefcaseBusiness className="h-4 w-4" />
                 <span>{t.home.viewProjects}</span>
               </NavLink>
 
-              <NavLink to="/contact" className="inline-flex items-center gap-2 rounded-2xl border border-white/20 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/5">
+              <NavLink
+                to="/contact"
+                className="inline-flex items-center gap-2 rounded-2xl border border-white/20 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/5"
+              >
                 <Mail className="h-4 w-4 text-cyan-300" />
                 <span>{t.home.contact}</span>
               </NavLink>
 
-              <a href="/cv.pdf" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-2xl border border-white/20 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/5">
+              <a
+                href="/cv.pdf"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-2xl border border-white/20 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/5"
+              >
                 <span>↓</span>
                 <span>{t.home.downloadCv}</span>
               </a>
+            </div>
+
+            <div className="mt-12">
+              <h2 className="text-2xl font-semibold text-white">Featured Work</h2>
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                {projects.slice(0, 2).map((project) => (
+                  <Link
+                    key={project.id}
+                    to={`/project/${project.id}`}
+                    className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5 transition hover:border-cyan-300/30 hover:bg-white/[0.06]"
+                  >
+                    <h3 className="text-lg font-semibold text-white">{project.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-slate-400">{project.overview}</p>
+                  </Link>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -601,7 +588,9 @@ function HomePage() {
                     <MapPinned className="h-5 w-5 text-cyan-300" />
                     <p className="text-sm uppercase tracking-[0.22em] text-slate-400">{t.home.mapTitle}</p>
                   </div>
-                  <div className="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-400">{t.home.mapCountry}</div>
+                  <div className="rounded-full border border-white/10 px-3 py-1 text-xs text-slate-400">
+                    {t.home.mapCountry}
+                  </div>
                 </div>
 
                 <div className="relative aspect-[1.22/1] overflow-hidden rounded-[20px] border border-white/10 bg-[#06101c]">
@@ -630,13 +619,20 @@ function HomePage() {
           {cards.map((card, index) => {
             const icons = [Eye, Compass, Target, Quote]
             const Icon = icons[index]
+            const isQuote = card.title === 'Quote' || card.title === 'مقولة'
+
             return (
-              <div key={card.title} className={`rounded-[24px] border p-6 ${card.title === 'Quote' || card.title === 'مقولة' ? 'border-cyan-400/15 bg-cyan-400/5' : 'border-white/10 bg-white/[0.04]'}`}>
+              <div
+                key={card.title}
+                className={`rounded-[24px] border p-6 ${isQuote ? 'border-cyan-400/15 bg-cyan-400/5' : 'border-white/10 bg-white/[0.04]'}`}
+              >
                 <div className="inline-flex items-center gap-3">
                   <Icon className="h-5 w-5 text-cyan-300" />
                   <p className="text-sm uppercase tracking-[0.24em] text-cyan-300/90">{card.title}</p>
                 </div>
-                <p className={`mt-4 text-sm leading-8 ${card.title === 'Quote' || card.title === 'مقولة' ? 'italic text-slate-200' : 'text-slate-300'}`}>{card.text}</p>
+                <p className={`mt-4 text-sm leading-8 ${isQuote ? 'italic text-slate-200' : 'text-slate-300'}`}>
+                  {card.text}
+                </p>
               </div>
             )
           })}
@@ -648,6 +644,7 @@ function HomePage() {
 
 function AboutPage() {
   const { t } = useSite()
+
   return (
     <>
       <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[linear-gradient(135deg,#0a1728_0%,#091321_55%,#06101c_100%)] p-8 shadow-2xl lg:p-12">
@@ -682,16 +679,20 @@ function AboutPage() {
 function ProjectsPage() {
   const { t } = useSite()
   const [search, setSearch] = useState('')
-  const [activeFilter, setActiveFilter] = useState('All')
+  const [activeFilter, setActiveFilter] = useState(t.projectsPage.all)
 
-  const filters = useMemo(
-    () => [t.projects.all, ...Object.values(t.projects.filters)],
-    [t]
-  )
+  useEffect(() => {
+    setActiveFilter(t.projectsPage.all)
+  }, [t.projectsPage.all])
 
-  const filteredProjects = t.projects.items.filter((project) => {
-    const matchesSearch = project.title.toLowerCase().includes(search.toLowerCase()) || project.description.toLowerCase().includes(search.toLowerCase())
-    const matchesFilter = activeFilter === t.projects.all || project.tags.includes(activeFilter)
+  const filters = [t.projectsPage.all, ...Object.values(t.projectsPage.filters)]
+
+  const filteredProjects = projects.filter((project) => {
+    const matchesSearch =
+      project.title.toLowerCase().includes(search.toLowerCase()) ||
+      project.overview.toLowerCase().includes(search.toLowerCase())
+
+    const matchesFilter = activeFilter === t.projectsPage.all || project.tags.includes(activeFilter)
     return matchesSearch && matchesFilter
   })
 
@@ -699,19 +700,21 @@ function ProjectsPage() {
     <>
       <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[linear-gradient(135deg,#0a1728_0%,#091321_55%,#06101c_100%)] p-8 shadow-2xl lg:p-12">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(59,130,246,0.10),transparent_22%)]" />
+
         <div className="relative">
           <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2">
             <BriefcaseBusiness className="h-4 w-4 text-cyan-300" />
-            <span className="text-sm uppercase tracking-[0.28em] text-cyan-300/90">{t.projects.badge}</span>
+            <span className="text-sm uppercase tracking-[0.28em] text-cyan-300/90">{t.projectsPage.badge}</span>
           </div>
-          <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">{t.projects.title}</h1>
-          <p className="mt-6 max-w-4xl text-lg leading-9 text-slate-300">{t.projects.lead}</p>
+
+          <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">{t.projectsPage.title}</h1>
+          <p className="mt-6 max-w-4xl text-lg leading-9 text-slate-300">{t.projectsPage.lead}</p>
 
           <div className="mt-8 grid gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder={t.projects.search}
+              placeholder={t.projectsPage.search}
               className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none placeholder:text-slate-500"
             />
             <div className="flex flex-wrap gap-2">
@@ -731,30 +734,37 @@ function ProjectsPage() {
 
       <section className="mt-10 grid gap-6 lg:grid-cols-2">
         {filteredProjects.map((project, index) => (
-          <div key={project.title} className="rounded-[28px] border border-white/10 bg-white/[0.04] p-7">
-            <div className="mb-5 flex items-center gap-4">
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 text-sm font-semibold text-cyan-200">
-                0{index + 1}
+          <Link to={`/project/${project.id}`} key={project.id}>
+            <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-7 transition hover:border-cyan-300/30 hover:bg-white/[0.06]">
+              <div className="mb-5 flex items-center gap-4">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 text-sm font-semibold text-cyan-200">
+                  0{index + 1}
+                </div>
+                <h3 className="text-2xl font-semibold text-white">{project.title}</h3>
               </div>
-              <h3 className="text-2xl font-semibold text-white">{project.title}</h3>
-            </div>
-            <p className="text-base leading-8 text-slate-400">{project.description}</p>
-            <div className="mt-5 flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
-                <span key={tag} className="rounded-full bg-cyan-400/10 px-3 py-1.5 text-xs font-medium text-cyan-200">
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <div className="mt-6">
-              <p className="mb-3 text-sm uppercase tracking-[0.22em] text-slate-500">{t.projects.details}</p>
-              <ul className="space-y-2 text-sm text-slate-300">
-                {project.highlights.map((item) => (
-                  <li key={item}>• {item}</li>
+
+              <p className="text-base leading-8 text-slate-400">{project.overview}</p>
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span key={tag} className="rounded-full bg-cyan-400/10 px-3 py-1.5 text-xs font-medium text-cyan-200">
+                    {tag}
+                  </span>
                 ))}
-              </ul>
+              </div>
+
+              <div className="mt-6">
+                <p className="mb-3 text-sm uppercase tracking-[0.22em] text-slate-500">{t.projectsPage.details}</p>
+                <ul className="space-y-2 text-sm text-slate-300">
+                  {project.highlights.map((item) => (
+                    <li key={item}>• {item}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="mt-6 text-sm font-medium text-cyan-300">{t.projectsPage.open} →</div>
             </div>
-          </div>
+          </Link>
         ))}
       </section>
     </>
@@ -763,12 +773,23 @@ function ProjectsPage() {
 
 function ContactPage() {
   const { t } = useSite()
-  const [form, setForm] = useState({ name: '', company: '', reason: t.contact.reasonOptions[0], message: '' })
+  const [form, setForm] = useState({
+    name: '',
+    company: '',
+    reason: t.contact.reasonOptions[0],
+    message: '',
+  })
+
+  useEffect(() => {
+    setForm((prev) => ({ ...prev, reason: t.contact.reasonOptions[0] }))
+  }, [t.contact.reasonOptions])
 
   const handleSubmit = (e) => {
     e.preventDefault()
     const subject = encodeURIComponent(`${form.reason} - ${form.name}`)
-    const body = encodeURIComponent(`Name: ${form.name}\nCompany: ${form.company}\nReason: ${form.reason}\n\nMessage:\n${form.message}`)
+    const body = encodeURIComponent(
+      `Name: ${form.name}\nCompany: ${form.company}\nReason: ${form.reason}\n\nMessage:\n${form.message}`
+    )
     window.location.href = `mailto:moazhomsi23@gmail.com?subject=${subject}&body=${body}`
   }
 
@@ -796,20 +817,28 @@ function ContactPage() {
               <span className="text-lg font-medium">moazhomsi23@gmail.com</span>
             </div>
           </div>
+
           <div className="rounded-[22px] border border-white/10 bg-white/[0.04] p-5">
             <div className="inline-flex items-center gap-3">
               <Phone className="h-5 w-5 text-cyan-300" />
               <span className="text-lg font-medium">+971 56 120 9346</span>
             </div>
           </div>
+
           <div className="rounded-[22px] border border-white/10 bg-white/[0.04] p-5">
             <div className="inline-flex items-center gap-3">
               <MapPinned className="h-5 w-5 text-cyan-300" />
               <span className="text-lg font-medium">{t.contact.locationValue}</span>
             </div>
           </div>
+
           <div className="rounded-[22px] border border-white/10 bg-white/[0.04] p-5">
-            <a href="https://www.linkedin.com/in/mohammed-alhomsi-4a8043112" target="_blank" rel="noreferrer" className="text-lg font-medium text-white hover:text-cyan-300">
+            <a
+              href="https://www.linkedin.com/in/mohammed-alhomsi-4a8043112"
+              target="_blank"
+              rel="noreferrer"
+              className="text-lg font-medium text-white hover:text-cyan-300"
+            >
               {t.contact.linkedin}
             </a>
           </div>
@@ -817,6 +846,7 @@ function ContactPage() {
 
         <form onSubmit={handleSubmit} className="rounded-[28px] border border-white/10 bg-white/[0.04] p-7">
           <h3 className="text-2xl font-semibold">{t.contact.formTitle}</h3>
+
           <div className="mt-6 grid gap-4 md:grid-cols-2">
             <input
               value={form.name}
@@ -831,6 +861,7 @@ function ContactPage() {
               className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none placeholder:text-slate-500"
             />
           </div>
+
           <select
             value={form.reason}
             onChange={(e) => setForm((prev) => ({ ...prev, reason: e.target.value }))}
@@ -842,6 +873,7 @@ function ContactPage() {
               </option>
             ))}
           </select>
+
           <textarea
             value={form.message}
             onChange={(e) => setForm((prev) => ({ ...prev, message: e.target.value }))}
@@ -849,10 +881,83 @@ function ContactPage() {
             rows={7}
             className="mt-4 w-full rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-white outline-none placeholder:text-slate-500"
           />
+
           <button type="submit" className="mt-5 rounded-2xl bg-cyan-400 px-5 py-3 font-semibold text-slate-950">
             {t.contact.send}
           </button>
         </form>
+      </section>
+    </>
+  )
+}
+
+function ProjectDetailPage() {
+  const { t } = useSite()
+  const { id } = useParams()
+  const project = projects.find((p) => p.id === id)
+
+  if (!project) {
+    return (
+      <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-8">
+        <h1 className="text-3xl font-semibold">{t.projectDetail.notFound}</h1>
+      </div>
+    )
+  }
+
+  return (
+    <>
+      <section className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[linear-gradient(135deg,#0a1728_0%,#091321_55%,#06101c_100%)] p-8 shadow-2xl lg:p-12">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.12),transparent_28%),radial-gradient(circle_at_85%_18%,rgba(59,130,246,0.10),transparent_22%)]" />
+        <div className="relative">
+          <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 px-4 py-2">
+            <BriefcaseBusiness className="h-4 w-4 text-cyan-300" />
+            <span className="text-sm uppercase tracking-[0.28em] text-cyan-300/90">{t.projectDetail.badge}</span>
+          </div>
+
+          <h1 className="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">{project.title}</h1>
+          <p className="mt-4 text-lg text-slate-300">
+            {project.role} • {project.sector}
+          </p>
+          <p className="mt-6 max-w-4xl text-lg leading-9 text-slate-300">{project.overview}</p>
+
+          <div className="mt-8">
+            <Link
+              to="/projects"
+              className="inline-flex items-center gap-2 rounded-2xl border border-white/20 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/5"
+            >
+              ← {t.projectDetail.back}
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-10 grid gap-6 lg:grid-cols-3">
+        <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-7 lg:col-span-2">
+          <h3 className="text-2xl font-semibold text-white">{t.projectDetail.whatIDid}</h3>
+          <ul className="mt-5 space-y-3 text-slate-300">
+            {project.actions.map((item) => (
+              <li key={item}>• {item}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-7">
+          <h3 className="text-2xl font-semibold text-white">{t.projectDetail.outputs}</h3>
+          <ul className="mt-5 space-y-3 text-slate-300">
+            {project.outputs.map((item) => (
+              <li key={item}>• {item}</li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      <section className="mt-6 rounded-[28px] border border-white/10 bg-white/[0.04] p-7">
+        <h3 className="text-2xl font-semibold text-white">{t.projectDetail.results}</h3>
+        <ul className="mt-5 space-y-3 text-slate-300">
+          {project.results.map((item) => (
+            <li key={item}>• {item}</li>
+          ))}
+        </ul>
       </section>
     </>
   )
