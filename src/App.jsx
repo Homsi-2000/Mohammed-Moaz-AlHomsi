@@ -15,7 +15,6 @@ import {
   Quote,
 } from 'lucide-react'
 import { projects } from './data/projects.js'
-
 const SiteContext = createContext(null)
 
 const translations = {
