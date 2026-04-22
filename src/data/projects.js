@@ -1,35 +1,211 @@
 export const projects = [
   {
-    title: "Business Development Pipeline Expansion",
-    results: [
-      "15% increase in new-business revenue",
-      "35% growth in qualified leads"
-    ]
+    id: 'pipeline',
+    title: 'Business Development Pipeline Expansion',
+    sector: 'Public & Private Sector',
+    role: 'Business Development Consultant',
+    overview:
+      'Built and optimized a structured sales pipeline to increase qualified opportunities, improve proposal conversion, and support revenue growth across consulting engagements.',
+    actions: [
+      'Identified and qualified leads through targeted outreach and market research',
+      'Developed proposals, pricing strategies, and go-to-market approaches',
+      'Engaged stakeholders and supported contract negotiation',
+      'Coordinated internally to align proposed solutions with client requirements',
+      'Maintained client relationships to support retention and repeat engagements',
+    ],
+    outputs: [
+      'Structured pipeline of qualified opportunities',
+      'Submitted proposals and secured client engagements',
+      'Improved lead qualification and follow-up process',
+    ],
+    results: ['15% increase in new-business revenue', '35% growth in qualified leads'],
+    tags: ['Business Development', 'Consulting'],
+    highlights: ['Pipeline growth', 'Proposal development', 'Revenue impact'],
   },
   {
-    title: "ICP 7 Stars Service Excellence Implementation",
+    id: 'icp',
+    title: 'ICP UAE – 7 Stars Service Excellence Implementation',
+    sector: 'Government',
+    role: 'Consultant',
+    overview:
+      'Supported implementation of the UAE Government Global Stars (7 Stars) Service Excellence Framework across multiple ICP centers, with a focus on assessment, improvement planning, and institutional readiness.',
+    actions: [
+      'Conducted end-to-end assessments against 7 Stars and GEM 2.0 criteria',
+      'Identified service gaps and improvement opportunities',
+      'Developed structured improvement roadmaps with stakeholders',
+      'Supported audit preparation and evidence documentation',
+      'Facilitated workshops and stakeholder sessions to align entities with excellence requirements',
+    ],
+    outputs: [
+      'Assessment reports',
+      'Improvement plans aligned with federal excellence standards',
+      'Structured excellence documentation and evidence frameworks',
+      'Audit readiness support materials',
+    ],
     results: [
-      "Assessment reports delivered",
-      "Improvement roadmap created"
-    ]
+      'Insufficient data to verify specific quantified metrics',
+      'Supported alignment with federal excellence standards and UAE Vision 2031 priorities',
+    ],
+    tags: ['Government', 'Excellence', 'Consulting'],
+    highlights: ['7 Stars assessment', 'Improvement roadmap', 'Audit support'],
   },
   {
-    title: "Ajman Government Mystery Shopper Assessment",
-    results: [
-      "Customer experience evaluation completed",
-      "Service improvement recommendations delivered"
-    ]
+    id: 'mohap',
+    title: 'MOHAP – Excellence Incubator System',
+    sector: 'Government',
+    role: 'Project Specialist',
+    overview:
+      'Co-developed and managed the Excellence Incubator system to streamline employee evaluation and award participation processes under the Sheikh Khalifa Bin Zayed Award for Excellence.',
+    actions: [
+      'Co-developed and managed the Excellence Incubator system',
+      'Integrated employee performance data, historical records, and job profiles',
+      'Conducted structured performance assessments',
+      'Managed documentation and supported annual evaluations',
+      'Produced reporting to support fairness, accuracy, and compliance',
+    ],
+    outputs: [
+      'Centralized employee evaluation workflow',
+      'Integrated performance and profile data structure',
+      'Assessment documentation and annual evaluation support',
+    ],
+    results: ['Insufficient data to verify specific quantified metrics'],
+    tags: ['Government', 'Digital Systems', 'Excellence'],
+    highlights: ['Evaluation system', 'Data integration', 'Award process support'],
   },
   {
-    title: "Sales Growth & Market Expansion (Rofo Trading)",
-    results: [
-      "15% increase in sales",
-      "Expanded client base (50+ clients)"
-    ]
-  }
+    id: 'tdra',
+    title: 'TDRA – Service Quality & Data Analytics',
+    sector: 'Government',
+    role: 'Consultant',
+    overview:
+      'Supported service quality and excellence system improvement through data analysis, gap assessment, and contribution to a digital assessment environment.',
+    actions: [
+      'Analyzed data from 1,000+ sources using priority matrices and gap analysis',
+      'Delivered recommendations to improve digital platforms and call center performance',
+      'Conducted mystery shopper evaluations across customer interaction channels',
+      'Developed training materials on the Global Stars framework',
+      'Contributed to a digital assessment system supporting 7 Stars evaluations',
+    ],
+    outputs: [
+      'Service improvement insights and recommendations',
+      'Training materials for internal capability building',
+      'Contribution to a digital 7 Stars assessment system',
+    ],
+    results: ['Analyzed data from 1,000+ sources'],
+    tags: ['Government', 'Digital Systems', 'Excellence', 'Consulting'],
+    highlights: ['Large-scale data analysis', 'Digital assessment support', 'Service quality improvement'],
+  },
+  {
+    id: 'ajep',
+    title: 'AJEP – Mystery Shopper & Excellence Assessment',
+    sector: 'Public Sector',
+    role: 'Consultant',
+    overview:
+      'Supported mystery shopper and excellence assessment projects across Ajman Government service channels to evaluate customer experience, service quality, and performance gaps.',
+    actions: [
+      'Conducted mystery shopper visits across service channels',
+      'Assessed service performance against excellence standards',
+      'Analyzed customer journey touchpoints',
+      'Contributed to structured reporting and recommendations',
+      'Supported excellence and Global Stars initiatives for Ajman Police',
+    ],
+    outputs: [
+      'Structured evaluation reports',
+      'Service improvement recommendations',
+      'Assessment support materials for excellence initiatives',
+    ],
+    results: ['Insufficient data to verify specific quantified metrics'],
+    tags: ['Government', 'Consulting', 'Excellence'],
+    highlights: ['Customer experience review', 'Evaluation reporting', 'Excellence support'],
+  },
+  {
+    id: 'rofo-sales-exec',
+    title: 'Sales Growth & Market Expansion – Rofo Trading',
+    sector: 'Retail / FMCG',
+    role: 'Sales Executive',
+    overview:
+      'Drove sales growth and market expansion through targeted customer engagement, strategic upselling, and promotional execution.',
+    actions: [
+      'Executed targeted sales and upselling strategies',
+      'Developed and implemented promotional campaigns',
+      'Built and maintained relationships with clients and stakeholders',
+      'Analyzed market trends to refine sales tactics',
+      'Worked closely with the sales team to identify new business opportunities',
+    ],
+    outputs: [
+      'Increased product visibility and customer engagement',
+      'Expanded client base with 50+ client relationships',
+      'Improved repeat business and referrals',
+    ],
+    results: ['15% increase in sales', 'Built relationships with over 50 clients'],
+    tags: ['Business Development', 'Consulting'],
+    highlights: ['Sales growth', 'Campaign execution', 'Market expansion'],
+  },
+  {
+    id: '3d-power',
+    title: '3D Power General – Market Research & Project Support',
+    sector: 'Business / Projects',
+    role: 'Intern',
+    overview:
+      'Supported business and project teams through market research, reporting, coordination, and stakeholder communication during internship work in Abu Dhabi.',
+    actions: [
+      'Conducted market research and competitor analysis',
+      'Prepared reports and assisted with documentation',
+      'Supported meetings and stakeholder communication',
+      'Helped coordinate project schedules and track deliverables',
+      'Contributed insights used in project proposals',
+    ],
+    outputs: [
+      'Market and competitor insight summaries',
+      'Presentations and technical support documents',
+      'Improved coordination of schedules and deliverables',
+    ],
+    results: ['Insufficient data to verify specific quantified metrics'],
+    tags: ['Consulting'],
+    highlights: ['Research support', 'Documentation', 'Project coordination'],
+  },
+  {
+    id: 'rofo-promoter-2022',
+    title: 'Rofo Trading – Sales Promotion & Product Visibility (2022)',
+    sector: 'Retail',
+    role: 'Sales Promoter',
+    overview:
+      'Supported product awareness and in-store sales performance through direct customer engagement, promotional execution, and sales-target delivery.',
+    actions: [
+      'Engaged directly with customers to explain product features and benefits',
+      'Supported daily sales target achievement through persuasive communication',
+      'Coordinated promotional activities with the sales team',
+      'Provided personalized recommendations to customers',
+    ],
+    outputs: [
+      'Improved product visibility',
+      'Enhanced customer engagement during promotional periods',
+      'Consistent support for sales target achievement',
+    ],
+    results: ['15% rise in sales', 'Engaged with over 100 customers daily'],
+    tags: ['Business Development'],
+    highlights: ['Customer engagement', 'Sales promotion', 'Retail execution'],
+  },
+  {
+    id: 'rofo-promoter-2021',
+    title: 'Rofo Trading – Sales Promotion & Event Execution (2021)',
+    sector: 'Retail',
+    role: 'Sales Promoter',
+    overview:
+      'Supported product sales growth through demonstrations, promotional events, and product-display optimization in a customer-facing retail environment.',
+    actions: [
+      'Explained product features and benefits to customers',
+      'Coordinated promotional events',
+      'Maintained and improved product displays',
+      'Tracked sales performance and shared customer feedback',
+    ],
+    outputs: [
+      'Improved product presentation and visual appeal',
+      'Promotional event support and execution',
+      'Feedback insights for marketing improvement',
+    ],
+    results: ['15% increase in product sales', '10% rise in foot traffic'],
+    tags: ['Business Development'],
+    highlights: ['Product promotion', 'Event execution', 'Retail growth support'],
+  },
 ]
-
-
-
-
-
