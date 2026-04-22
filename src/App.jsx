@@ -14,7 +14,7 @@ import {
   Compass,
   Quote,
 } from 'lucide-react'
-import { projects } from './data/projects'
+import { projects } from './data/projects.js'
 
 const SiteContext = createContext(null)
 
