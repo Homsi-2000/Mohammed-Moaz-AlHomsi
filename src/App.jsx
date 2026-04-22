@@ -1,3 +1,4 @@
+import { projects } from './data/projects'
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react'
 import profileImg from './assets/profile.jpg'
 import uaeMapImg from './assets/uae-map.png'
